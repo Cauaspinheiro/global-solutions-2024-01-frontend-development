@@ -34,9 +34,11 @@ def predict():
         img[0],
     )
 
-    return jsonify(
-        {"prediction": classification, "confidence": round(float(prediction), 2)}
-    )
+    confidence = 1 - prediction if classification == "healthy" else prediction
+
+    confidence = round(float(confidence), 2)
+
+    return jsonify({"prediction": classification, "confidence": confidence})
 
 
 @app.route("/images", methods=["GET"])

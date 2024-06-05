@@ -29,8 +29,8 @@ export function BackendStatusTag({ status, ...props }: BackendStatusTagProps) {
           className={clsx(
             "absolute h-[10px] w-[10px] animate-ping rounded-full transition-colors",
             {
-              "bg-green-500": status === "healthy",
-              "bg-red-500": status === "error",
+              "bg-teal-500": status === "healthy",
+              "bg-rose-500": status === "error",
               "bg-gray-500": status === "loading",
             },
           )}
@@ -38,8 +38,8 @@ export function BackendStatusTag({ status, ...props }: BackendStatusTagProps) {
 
         <div
           className={clsx("h-[10px] w-[10px] rounded-full transition-colors", {
-            "bg-green-500": status === "healthy",
-            "bg-red-500": status === "error",
+            "bg-teal-500": status === "healthy",
+            "bg-rose-500": status === "error",
             "bg-gray-500": status === "loading",
           })}
         ></div>
@@ -47,8 +47,8 @@ export function BackendStatusTag({ status, ...props }: BackendStatusTagProps) {
 
       <span
         className={clsx("text-sm font-semibold", {
-          "text-green-500": status === "healthy",
-          "text-red-500": status === "error",
+          "text-teal-500": status === "healthy",
+          "text-rose-500": status === "error",
           "text-gray-500": status === "loading",
         })}
       >

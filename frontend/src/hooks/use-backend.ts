@@ -1,5 +1,6 @@
-import { useEffect } from "react"
+import { useEffect, useMemo } from "react"
 import { create } from "zustand"
+import axios from "axios"
 
 export type BackendStatus = "loading" | "healthy" | "error"
 
@@ -31,6 +32,8 @@ export function useBackend() {
       setBackendStatus(status)
     })
   }
+
+  const api = useMemo(() => axios.create({ baseURL: backendUrl }), [backendUrl])
 
   async function testBackend(url: string): Promise<BackendStatus> {
     try {
@@ -67,5 +70,6 @@ export function useBackend() {
     onBackendChange,
     testBackend,
     backendStatus,
+    api,
   }
 }

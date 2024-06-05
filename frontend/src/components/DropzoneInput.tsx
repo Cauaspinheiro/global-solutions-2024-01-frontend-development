@@ -1,5 +1,6 @@
 import { useDropzone } from "react-dropzone"
 import clsx from "clsx"
+import { PredictionItem } from "./PredictionItem"
 
 export function DropzoneInput() {
   const {
@@ -33,7 +34,7 @@ export function DropzoneInput() {
     <div className="flex flex-col gap-4">
       <div
         className={clsx(
-          "flex h-[50vh] max-h-[400px] w-full cursor-pointer items-center justify-center gap-3 p-10",
+          "flex h-[40vh] max-h-[400px] min-h-max w-full cursor-pointer items-center justify-center gap-3 p-10",
           "group rounded-lg border-2 border-dashed transition-all duration-300 focus:border-2 focus:border-blue-900 focus:outline-none",
           {
             "border-teal-700 bg-teal-950 text-white": isDragAccept,
@@ -63,13 +64,37 @@ export function DropzoneInput() {
         </div>
       </div>
 
-      <ul>
-        {acceptedFiles.map((file) => (
-          <li key={file.name}>
-            {file.name} - {file.size} bytes
-          </li>
-        ))}
-      </ul>
+      <div className="flex flex-col gap-7">
+        {!!acceptedFiles.length && (
+          <div className="flex flex-col gap-2">
+            <h3 className="font-semibold text-gray-100">Arquivos aceitos:</h3>
+
+            <div className="flex flex-col gap-3 text-sm font-medium">
+              {acceptedFiles.map((file) => (
+                <PredictionItem key={file.name} file={file} />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {!!fileRejections.length && (
+          <div className="flex flex-col gap-2">
+            <h3 className="font-semibold text-gray-100">
+              Arquivos rejeitados:
+            </h3>
+
+            <div className="flex flex-col gap-3 text-sm font-medium">
+              {fileRejections.map(({ file }) => (
+                <div className="flex items-center justify-between rounded-md border border-rose-900 px-4 py-3">
+                  <p className="text-sm font-medium text-rose-500">
+                    {file.name}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   )
 }

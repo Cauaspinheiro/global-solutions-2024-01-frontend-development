@@ -1,6 +1,9 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { LandingPage } from "./pages/Landing/LandingPage";
-import { DashboardPage } from "./pages/Dashboard/DashboardPage";
+import { createBrowserRouter, RouterProvider } from "react-router-dom"
+import { LandingPage } from "./pages/Landing/LandingPage"
+import { DashboardPage } from "./pages/Dashboard/DashboardPage"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+
+const queryClient = new QueryClient()
 
 const router = createBrowserRouter([
   {
@@ -11,8 +14,12 @@ const router = createBrowserRouter([
     path: "/dashboard",
     element: <DashboardPage />,
   },
-]);
+])
 
 export function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
+  )
 }
