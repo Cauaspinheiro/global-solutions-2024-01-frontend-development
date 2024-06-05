@@ -6,19 +6,16 @@ import { BackendStatus, useBackend } from "../hooks/use-backend"
 import { z } from "zod"
 import { BackendStatusTag } from "./BackendStatusTag"
 
-export interface BackendDialogProps {
-  isOpen: boolean
-  onOpenChange: (open: boolean) => void
-}
-
 const backendUrlSchema = z.string().url()
 
-export function BackendDialog(props: BackendDialogProps) {
-  const { testBackend, onBackendChange, backendUrl } = useBackend()
+export function BackendDialog() {
+  const { testBackend, onBackendChange, backendUrl, backendStatus } =
+    useBackend()
 
   const [inputMessage, setInputMessage] = useState("")
   const [validUrl, setValidUrl] = useState("")
   const [inputStatus, setInputStatus] = useState<BackendStatus>()
+  const [open, setOpen] = useState(false)
 
   function onInputChange(event: React.ChangeEvent<HTMLInputElement>) {
     const newBackendUrl = event.target.value
@@ -47,12 +44,24 @@ export function BackendDialog(props: BackendDialogProps) {
 
   async function handleSaveValidUrl() {
     onBackendChange(validUrl)
-    props.onOpenChange(false)
+    setOpen(false)
   }
 
   return (
-    <DialogPrimitive.Root open={props.isOpen} onOpenChange={props.onOpenChange}>
-      <DialogPrimitive.Trigger>Open</DialogPrimitive.Trigger>
+    <DialogPrimitive.Root
+      open={open}
+      onOpenChange={(newOpen) => {
+        if (!newOpen) {
+          setInputMessage("")
+          setInputStatus(undefined)
+        }
+
+        setOpen(newOpen)
+      }}
+    >
+      <DialogPrimitive.Trigger>
+        <BackendStatusTag status={backendStatus} />
+      </DialogPrimitive.Trigger>
 
       <DialogPrimitive.Portal>
         <DialogPrimitive.Overlay
@@ -104,6 +113,7 @@ export function BackendDialog(props: BackendDialogProps) {
               <BackendStatusTag
                 status={inputStatus}
                 customMessage={inputMessage}
+                showBackground={false}
               />
             )}
           </div>

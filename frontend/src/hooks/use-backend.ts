@@ -5,13 +5,14 @@ export type BackendStatus = "loading" | "healthy" | "error"
 
 interface BackendStore {
   backendUrl: string
-  backendStatus?: BackendStatus
+  backendStatus: BackendStatus
   setBackendStatus: (status: BackendStatus) => void
   setBackendUrl: (url: string) => void
 }
 
 const useBackendStore = create<BackendStore>((set) => ({
   backendUrl: localStorage.getItem("backendUrl") ?? "http://localhost:5001",
+  backendStatus: "loading",
   setBackendStatus: (status: BackendStatus) => set({ backendStatus: status }),
   setBackendUrl: (url: string) => set({ backendUrl: url }),
 }))
@@ -22,7 +23,13 @@ export function useBackend() {
 
   function onBackendChange(newBackendUrl: string) {
     localStorage.setItem("backendUrl", newBackendUrl)
+
     setBackendUrl(newBackendUrl)
+    setBackendStatus("loading")
+
+    testBackend(newBackendUrl).then((status) => {
+      setBackendStatus(status)
+    })
   }
 
   async function testBackend(url: string): Promise<BackendStatus> {
@@ -40,15 +47,19 @@ export function useBackend() {
   }
 
   useEffect(() => {
-    if (!backendUrl) {
-      return
-    }
-
-    setBackendStatus("loading")
-
     testBackend(backendUrl).then((status) => {
       setBackendStatus(status)
     })
+  }, [])
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      testBackend(backendUrl).then((status) => {
+        setBackendStatus(status)
+      })
+    }, 5000)
+
+    return () => clearInterval(interval)
   }, [backendUrl])
 
   return {
