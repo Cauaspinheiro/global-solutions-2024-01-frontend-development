@@ -2,14 +2,10 @@ import { useQuery } from "@tanstack/react-query"
 import { useBackend } from "../hooks/use-backend"
 import { CircleNotch } from "@phosphor-icons/react"
 import clsx from "clsx"
+import { PredictionResponse } from "../types"
 
 export interface PredictionItemProps {
   file: File
-}
-
-interface PredictionResponse {
-  prediction: "healthy" | "bleached"
-  confidence: number
 }
 
 const classificationLabels = {
@@ -19,6 +15,10 @@ const classificationLabels = {
 
 export function PredictionItem({ file }: PredictionItemProps) {
   const { api } = useBackend()
+
+  const { refetch } = useQuery({
+    queryKey: ["predictions"],
+  })
 
   const {
     data: queryData,
@@ -31,6 +31,8 @@ export function PredictionItem({ file }: PredictionItemProps) {
       formData.append("image", file)
 
       const res = await api.post("/predict", formData)
+
+      refetch()
 
       return res.data
     },
