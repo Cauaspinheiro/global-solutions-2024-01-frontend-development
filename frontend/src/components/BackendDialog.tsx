@@ -103,7 +103,7 @@ export function BackendDialog() {
               <button
                 className="rounded-md bg-blue-800 px-6 py-2 font-medium text-white transition-all hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
                 onClick={handleSaveValidUrl}
-                disabled={inputStatus !== "healthy"}
+                disabled={inputStatus !== "healthy" && !!inputMessage}
               >
                 Definir
               </button>
