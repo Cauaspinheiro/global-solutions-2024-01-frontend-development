@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify, send_from_directory
+from flask_cors import CORS
 from tensorflow import keras
 import cv2
 import numpy as np
@@ -7,6 +8,7 @@ import os
 from datetime import datetime
 
 app = Flask(__name__)
+CORS(app)
 
 model = keras.models.load_model("coral_model.keras")
 
@@ -72,4 +74,9 @@ def delete_image(path):
     return jsonify({"message": "Image deleted"})
 
 
-app.run(port=5000, debug=True)
+@app.route("/health", methods=["GET"])
+def health():
+    return jsonify({"message": 200})
+
+
+app.run(port=5000)
