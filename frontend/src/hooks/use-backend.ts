@@ -12,7 +12,7 @@ interface BackendStore {
 }
 
 const useBackendStore = create<BackendStore>((set) => ({
-  backendUrl: localStorage.getItem("backendUrl") ?? "http://localhost:5001",
+  backendUrl: localStorage.getItem("backendUrl") ?? "http://localhost:5000",
   backendStatus: "loading",
   setBackendStatus: (status: BackendStatus) => set({ backendStatus: status }),
   setBackendUrl: (url: string) => set({ backendUrl: url }),
